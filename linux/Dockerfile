@@ -5,7 +5,7 @@ ARG VERSION = 1.17.0.03
 ENV VERSION = ${VERSION}
 
 # Install unzip
-RUN apt-get update && apt-get install -y --no-install-recommends \unzip \&& apt-get clean
+RUN apt-get update && apt-get install -y --no-install-recommends unzip && apt-get clean
 
 # Create server folder
 RUN mkdir server
