@@ -1,9 +1,25 @@
-FROM 
+FROM mcr.microsoft.com/powershell
 
-WORKDIR /tmp
+# Create variables
+ARG VERSION = 1.17.0.03
+ENV VERSION = ${VERSION}
+
+# Create server folder
+RUN mkdir server
+
+# Move workspace into server folder
+WORKDIR /server
 
 # Dowload Bedrock dedicated server
-ARG version = 1.17.0.03
-ADD https://minecraft.azureedge.net/bin-win/bedrock-server-${version}.zip bds.zip
+RUN Invoke-WebRequest -Uri https://minecraft.azureedge.net/bin-win/bedrock-server-${VERSION}.zip -OutFile bedrock-server.zip
 
-ENTRYPOINT [ "../entrypoint.sh" ]
+# Unzip the folder
+RUN Expand-Archive -LiteralPath bedrock-server.zip -DestinationPath bedrock-server
+
+# Remove the zip folder
+RUN del bedrock-server.zip
+
+# Move workspace into bedrock-server
+WORKDIR /bedrock-server
+
+CMD [ "bedrock_server.exe" ]
